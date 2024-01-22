@@ -1,0 +1,61 @@
+BoundedContext ProductCatalogManagementContext implements ProductCatalogDomain
+BoundedContext CustomerManagementContext implements CustomerDomain
+BoundedContext OrderManagementContext implements OrderDomain
+BoundedContext InventoryManagementContext implements InventoryDomain
+BoundedContext PaymentManagementContext implements PaymentDomain
+BoundedContext ShippingManagementContext implements ShippingDomain
+BoundedContext SecurityManagementContext implements SecurityDomain
+
+ContextMap {
+    type SYSTEM_LANDSCAPE
+    state TO_BE
+
+    /* Agrega los BoundedContext a el mapa de contexto */
+    contains ProductCatalogManagementContext, CustomerManagementContext, OrderManagementContext, InventoryManagementContext, PaymentManagementContext, ShippingManagementContext, SecurityManagementContext
+
+    /* Define las ralaciones */
+    ProductCatalogManagementContext Partnership OrderManagementContext
+    ProductCatalogManagementContext Customer-Supplier CustomerManagementContext
+    ProductCatalogManagementContext Shared-Kernel InventoryManagementContext
+    CustomerManagementContext [D,ACL] <- [U,OHS,PL] SecurityManagementContext
+    OrderManagementContext Customer-Supplier PaymentManagementContext
+    OrderManagementContext Customer-Supplier ShippingManagementContext
+    InventoryManagementContext [D,CF] <- [U,OHS,PL] ShippingManagementContext
+}
+
+Domain Prueba {
+    Subdomain ProductCatalogDomain {
+        type = CORE_DOMAIN
+        domainVisionStatement = "Gestión del catalogo de productos"
+    }
+
+    Subdomain CustomerDomain {
+        type = SUPPORTING_DOMAIN
+        domainVisionStatement = "Gestión de los clientes"
+    }
+
+    Subdomain OrderDomain {
+        type = SUPPORTING_DOMAIN
+        domainVisionStatement = "Gestión de las ordenes"
+    }
+
+    Subdomain InventoryDomain {
+        type = GENERIC_SUBDOMAIN
+        domainVisionStatement = "Gestión del inventario"
+    }
+
+    Subdomain PaymentDomain {
+        type GENERIC_SUBDOMAIN
+        domainVisionStatement = "Gestión de los pagos"
+    }
+
+    Subdomain ShippingDomain {
+        type SUPPORTING_DOMAIN
+        domainVisionStatement = "Gestión de las ventas"
+    }
+
+    Subdomain SecurityDomain {
+        type GENERIC_SUBDOMAIN
+        domainVisionStatement = "Gestión de la seguridad de la infomación"
+    }
+}
